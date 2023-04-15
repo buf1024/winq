@@ -146,12 +146,14 @@ class SuperFalling(Strategy):
 
 if __name__ == '__main__':
     from winq import *
+    import akshare as ak
+    ak.stock_hot_rank_latest_em
 
     db = default(log_level='debug')
 
     async def test_select():
         s = SuperFalling(db=db,
-                         test_end_date='20230406',
+                         test_end_date='20230410',
                          with_rt_kdata=False,
                          run_task_count=50,
                          load_daily=db.load_stock_daily,
@@ -160,6 +162,7 @@ if __name__ == '__main__':
                          )
 
         await s.prepare(max_first_day_rise=3.0,
+                        max_first_day_down=-6.0,
                         max_down_as_rise=-1.5,
                         max_meet_high_days=10,
                         min_high_falling=2.0,
@@ -169,7 +172,7 @@ if __name__ == '__main__':
                         max_rise_unfill_gaps=5.0,
                         sort_by='chg_pct')
 
-        data = await s.test(code='sz300275')
+        data = await s.test(code='sz300766')
         # data = await s.test(code='sh688047')*
         # data = await s.test(code='sh688313')
 
