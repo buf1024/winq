@@ -22,7 +22,7 @@ setup(
     install_requires=[
         'numpy',
         'pandas',
-        'akshare==1.6.75',
+        'akshare',
         'hiq_pyfetch',
         'aiohttp',
         'motor',

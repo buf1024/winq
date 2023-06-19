@@ -89,9 +89,13 @@ class SimpleRise(Strategy):
         if kdata is None:
             return None
         
-        data = kdata[kdata['chg_pct'] < 0.0]
-        if len(data) > 0:
+        chg_pct = kdata['chg_pct'].sum()
+        if chg_pct < 1.5 or chg_pct > 7.0:
             return None
+        
+        # data = kdata[kdata['chg_pct'] < 0.0]
+        # if len(data) > 0:
+        #     return None
         
         # latest = await self.load_daily(filter={'code': code,
         #                                        'trade_date': {'$lt': self.test_end_date}},
@@ -214,12 +218,12 @@ class SimpleRise(Strategy):
 
 if __name__ == '__main__':
     from winq import *
-
+    
     db = default(log_level='debug')
 
     async def test_trading():
         s = SimpleRise(db=db,
-                         test_end_date='20230411',
+                         test_end_date='20230417',
                          with_rt_kdata=True,
                          run_task_count=50,
                          load_daily=db.load_stock_daily,
@@ -227,7 +231,7 @@ if __name__ == '__main__':
                          fetch_daily=fetch.fetch_stock_bar
                          )
 
-        await s.prepare(cal_time='10:20:00',
+        await s.prepare(cal_time='10:30:00',
                         max_down_as_rise=-1.0,
                         max_turnover=7.0,
                         max_20cm_rise=5.0,
@@ -236,7 +240,7 @@ if __name__ == '__main__':
                         max_10cm_falling=1.5,
                         sort_by='chg_pct')
 
-        data = await s.test(code='sh688004')
+        data = await s.test(code='sh688121')
         print(data)
 
     run_until_complete(test_trading())
