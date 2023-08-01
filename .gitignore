@@ -63,4 +63,5 @@ dist/*
 z_gen_*.py
 *.ipynb_checkpoint*
 config.yml
+notebook
 .vscode
